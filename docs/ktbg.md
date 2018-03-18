@@ -30,7 +30,6 @@
 - 数据库设计  
 主要包括用户表、事件表、资源映射表、邮件表   
 ### 用户表
-用户基本信息  
 字段|含义|类型
 -|-|-|
 userName|用户名|varchar
@@ -42,8 +41,7 @@ avatar|用户头像|varchar
 sex|性别|int
 bio|个人签名|varchar
 createdTime|注册时间|varchar
-### 事件表
-每一个事件的详情  
+### 事件表 
 字段|含义|类型
 -|-|-|
 id|事件id|int
@@ -53,15 +51,13 @@ detail|概述|varchar
 createdBy|创建人|int
 level|心情枚举|int
 ### 资源映射表
-每个事件附件的资源映射
 字段|含义|类型
 -|-|-|
 id|资源id|int
 time|上传时间|varchar
 eventId|所属事件id|int
 type|类型枚举|int
-### 邮件表
-定时任务每天定时检查数据库，并发送邮件  
+### 邮件表 
 字段|含义|类型
 -|-|-|
 id|邮件id|int

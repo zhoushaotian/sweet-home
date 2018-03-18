@@ -65,7 +65,8 @@ time|创建时间|varchar
 content|内容|varchar
 sendTime|发送时间|varchar
 isSend|是否已发送|bool
-receiver|收件人|varchar
+receiver|收件人|varchar  
+
 要求学生在一定时间内学习和掌握html、css、JavaScript、mysql以及服务器的搭建，并且设计过程能够融入自己的想法，然后给用户更好的体验。同时要求论文撰写规范，结构完整，条理清晰，按规定格式完成并打印。
 ## 实施步骤
 2018.2：选题，收集资料，完成初步的网页设计思路以及排版样式，完成设计稿。  

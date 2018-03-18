@@ -58,7 +58,7 @@ time|上传时间|varchar
 eventId|所属事件id|int
 type|类型枚举|int
 ### 邮件表 
-字段|含义|类型
+字段|含义|类型|
 -|-|-|
 id|邮件id|int
 time|创建时间|varchar

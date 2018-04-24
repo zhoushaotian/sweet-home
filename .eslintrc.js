@@ -1,11 +1,9 @@
 module.exports = {
     "env": {
         "es6": true,
-        "browser": true,
         "node": true
     }, 
-    parser: 'babel-eslint',
-    "extends": ["eslint:recommended",'plugin:react/recommended'],
+    "extends": ["eslint:recommended"],
     "rules": {
         "key-spacing": [2, {                      // enforce spacing between keys and values in object literal properties
             "beforeColon": false,

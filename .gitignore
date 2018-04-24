@@ -1,3 +1,5 @@
 # floder
 /config/
 /node_modules/
+.vscode/
+/config/

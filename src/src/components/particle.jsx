@@ -89,7 +89,7 @@ class Particle extends React.Component {
         });
         for(let i = 0; i < 25; i++) {
             this._circleArr.forEach((circle) => {
-                drawLine(this._circleArr[i], circle, ctx);
+                drawLine(this._circleArr[i], circle, ctx, 'rgba(204, 85, 0, .1)');
             });
         }
         this._circleArr.forEach(function(circle) {
@@ -124,6 +124,7 @@ class Particle extends React.Component {
                 speedX: Math.random(),
                 speedY: Math.random(),
                 canvasDom: canvasDom,
+                color: 'rgba(233,150,122)'
             }));
         }
     }

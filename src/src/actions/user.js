@@ -51,10 +51,28 @@ export function fetchUserInfo() {
         fetchData('loginInfo')
             .then(function(res) {
                 dispatch(updateTableLoading(false));
-                dispatch(updateUserInfo(res.data.data));
+                dispatch(updateUserInfo(res.data.data.data));
             }).catch(function(err) {
                 dispatch(updateTableLoading(false));
                 message.error(err.message);
             });
+    };
+}
+
+export function setMate(id) {
+    return function(dispatch) {
+        dispatch(updateFormLoading(true));
+        fetchData('setMate', {
+            mateId: id
+        }).then(function(res) {
+            dispatch(updateFormLoading(false));
+            if(!res.data.data.success) {
+                return message.error('设置失败');
+            }
+            message.success('设置成功');
+            return dispatch(fetchUserInfo());
+        }).catch(function(err) {
+            message.error(err.message);
+        });
     };
 }

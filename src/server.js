@@ -38,5 +38,6 @@ app.use(require('connect-history-api-fallback')());
 app.use(devMiddleware);
 app.use(hotMiddleware);
 //设置静态目录
-app.use('./dist', express.static(path.join(__dirname, '/dist')));
+console.log(path.join(__dirname, '../public'));
+app.use(express.static(path.join(__dirname, '../public')));
 app.listen('3000');

@@ -25,6 +25,36 @@ const event = require('../model/event');
 exports.rootPath = '/api';
 
 /**
+ * 查询昵称是否存在
+ */
+router.get('/nick/exit', function(req, res, next) {
+    user.queryUserByNick(req.query.nick)
+        .then(function(result) {
+            if(result.length !== 0) {
+                return res.send(tool.buildResData({
+                    success: false
+                }, '昵称存在'));
+            }
+            return res.send(tool.buildResData({
+                success: true
+            }));
+        }).catch(next);
+});
+/**
+ * 上传用户头像
+ */
+router.post('/upload/avatar', function (req, res, next) {
+    upload(req, res, function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.send(tool.buildResData({
+            path: `/img/${req.file.filename}`,
+            success: true
+        }));
+    });
+});
+/**
  * 注册用户
  */
 router.post('/signup', bodyParser.json(), function (req, res, next) {
@@ -106,15 +136,16 @@ router.post('/login', bodyParser.json(), function(req, res, next) {
 router.get('/login-info', function(req, res, next) {
     if(!req.session.userId) {
         let err = new Error('未登录');
-        err.status = STATUS_CODE.NO_PERMISSION;
+        err.status = STATUS_CODE.API_ERROR;
         return next(err);
     }
-    res.send(tool.buildResData({
-        nick: req.session.nick,
-        avatar: req.session.avatar,
-        sex: req.session.sex,
-        bio: req.session.bio
-    }, '获取登录状态成功'));
+    user.queryUserById(req.session.userId)
+        .then(function(result) {
+            res.send(tool.buildResData({
+                success: true,
+                data: result
+            }));
+        }).catch(next);
 });
 /**
  * 用户注销
@@ -135,12 +166,7 @@ router.get('/cancel', function (req, res) {
  * 搜索mate
  */
 router.get('/mate/search', checkLoginMid, function(req, res, next) {
-    if(!req.query.nickName) {
-        let err = new Error('缺少搜索关键词');
-        err.status = STATUS_CODE.API_ERROR;
-        return next(err);
-    }
-    user.searchMate(req.query.nickName).then(function(result) {
+    user.searchMate(req.session.userId).then(function(result) {
         res.send(tool.buildResData(result, '获取mate数据成功'));
     }).catch(next);
 });

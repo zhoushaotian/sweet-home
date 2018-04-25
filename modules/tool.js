@@ -13,9 +13,6 @@ exports.buildResData = function(data, msg) {
 exports.buildUserSession = function(user, req) {
     req.session.userId = user.userId;
     req.session.nick = user.nick;
-    req.session.avatar = user.avatar;
-    req.session.sex = user.sex;
-    req.session.bio = user.bio;
 };
 
 

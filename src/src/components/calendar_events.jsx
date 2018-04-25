@@ -47,31 +47,25 @@ class CalendarEvents extends React.Component {
                     extra={<Button icon="plus" shape="circle" onClick={this.handleShowAddEvent}/>}
                     bodyStyle={{height: '400px', overflow: 'auto'}}
                 >
-                    {result ? (
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={result}
-                            renderItem={item => (
-                                <List.Item
-                                    extra={moment(parseInt(item.time)).format(dateFomat)}
-                                    onClick={() => {this.setState({
-                                        showAddEvent: true,
-                                        curEvent: item
-                                    });}}
-                                >
-                                    <List.Item.Meta
-                                        title={<span>{item.level === 1 ? <Icon type="smile" style={{color: 'pink', marginRight: '10px'}}/> : <Icon type="frown" style={{color: 'black', marginRight: '10px'}}/>}{item.title}</span>}
-                                        description={item.detail}
-                                    />
-                                </List.Item>
-                            )}
-                            
-                        />
-                    ) : (
-                        <div>
-                            还未添加过事件
-                        </div>
-                    )}
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={result}
+                        renderItem={item => (
+                            <List.Item
+                                extra={moment(parseInt(item.time)).format(dateFomat)}
+                                onClick={() => {this.setState({
+                                    showAddEvent: true,
+                                    curEvent: item
+                                });}}
+                            >
+                                <List.Item.Meta
+                                    title={<span>{item.level === 1 ? <Icon type="smile" style={{color: 'pink', marginRight: '10px'}}/> : <Icon type="frown" style={{color: 'black', marginRight: '10px'}}/>}{item.title}</span>}
+                                    description={item.detail}
+                                />
+                            </List.Item>
+                        )}
+                        
+                    />
                 </Card>
                 <Modal
                     visible={showAddEvent}

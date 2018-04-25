@@ -3,6 +3,7 @@ import propTypes from 'prop-types';
 
 import { Form, Input, Spin, Button, Radio} from 'antd';
 
+import fetchData from '../../common/api';
 import AvatarUpload from '../avatar_upload';
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -93,6 +94,21 @@ class signUpForm extends React.Component {
                                     {
                                         required: true,
                                         message: '请填写昵称'
+                                    },
+                                    {
+                                        validator: (rule, value, cb) => {
+                                            if(!value) {
+                                                cb();
+                                            }
+                                            fetchData('nickExit', {
+                                                nick: value
+                                            }).then((res) => {
+                                                if(!res.data.data.success) {
+                                                    cb('这个昵称已经有人使用了!');
+                                                }
+                                                cb();
+                                            });
+                                        }
                                     }
                                 ]
                             })(

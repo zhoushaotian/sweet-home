@@ -7,6 +7,57 @@ const mysql = require('mysql');
 const mysqlOptions = require('../config/server').mysqlOpt;
 const pool = mysql.createPool(mysqlOptions);
 
+module.exports.queryUserByNick = function(nick) {
+    return new Promise(function(resolve, reject) {
+        pool.query('select * from user where nick=?', [nick], function(err, result) {
+            if(err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    });
+};
+
+module.exports.queryUserById = function(id) {
+    return new Promise(function(resolve, reject) {
+        pool.query('select * from user where userId=?', [id], function(err, result) {
+            if(err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    }).then(function(result) {
+        if(result.length === 0) {
+            return Promise.resolve({
+                user: {},
+                mate: null
+            });
+        }
+        delete result[0].userName;
+        delete result[0].passwd;
+        delete result[0].userId;
+        if(!result[0].mate) {
+            return Promise.resolve({
+                user: result[0],
+                mate: null
+            });
+        }
+        // 查询mate信息
+        return new Promise(function(resolve, reject) {
+            pool.query('select * from user where userId = ?', [result[0].mate], function(err, mateResult) {
+                if(err) {
+                    return reject(err);
+                }
+                delete mateResult.userName;
+                delete mateResult.passwd;
+                return resolve({
+                    user: result[0],
+                    mate: mateResult[0]
+                });
+            });
+        });
+    });
+};
 module.exports.queryUserByName = function(userName, passwd) {
     return new Promise(function(resolve, reject) {
         pool.query('select * from user where userName = ? and passwd = ?', [userName, passwd], function(err, result) {
@@ -43,9 +94,9 @@ module.exports.createUser = function(userOpts) {
     });
 };
 
-module.exports.searchMate = function(nick) {
+module.exports.searchMate = function(userId) {
     return new Promise(function(resolve, reject) {
-        pool.query('select userId from user where nick = ?', [nick], function(err, result) {
+        pool.query('select nick, userId from user where userId != ?', [userId], function(err, result) {
             if(err) {
                 return reject(err);
             }

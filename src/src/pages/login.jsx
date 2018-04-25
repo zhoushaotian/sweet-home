@@ -1,7 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {Card} from 'antd';
+import {Card, Tag} from 'antd';
 
 import SignUpForm from '../components/form/signup_form';
 import LoginForm from '../components/form/login_form';
@@ -45,6 +45,11 @@ class LoginPage extends React.Component {
                     <Card tabList={tabList} onTabChange={this.handleTabChange}>
                         {tabContent[this.state.curTabKey]}
                     </Card>
+                </div>
+                <div className="login-footer">
+                    <Tag color="blue">
+                        <a href="https://github.com/zhoushaotian/sweet-home">项目源代码</a>
+                    </Tag>
                 </div>
             </div>
         );

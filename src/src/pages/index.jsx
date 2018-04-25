@@ -2,12 +2,14 @@ import React from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { Layout, Menu, Avatar, Icon } from 'antd';
+import { Layout, Menu, Avatar, Icon, Modal } from 'antd';
 import Calendar from '../components/calendar';
 import CalendarEvents from '../components/calendar_events';
+import MateSetForm from '../components/form/mate_set';
 
-import {fetchUserInfo} from '../actions/user';
+import {fetchUserInfo, setMate} from '../actions/user';
 import {addEvent, fetchEvents, editEvent} from '../actions/events';
+
 
 const { Header, Content, Footer } = Layout;
 const MenuItem = Menu.Item;
@@ -24,6 +26,10 @@ class Index extends React.Component {
         this.handleAddEvent = this.handleAddEvent.bind(this);
         this.handleEditEvent = this.handleEditEvent.bind(this);
         this.handleClickMenu = this.handleClickMenu.bind(this);
+        this.handleSetMate = this.handleSetMate.bind(this);
+        this.state = {
+            showSetModal: false
+        };
     }
     componentDidMount() {
         const {dispatch} = this.props;
@@ -32,12 +38,13 @@ class Index extends React.Component {
     }
     render() {
         const {events, user} = this.props;
+        const {showSetModal} = this.state;
         return (
             <Layout className="layout">
                 <Header className="layout-header">
                     <div className="header-info"> 
-                        <Avatar shape="circle" size="large" style={{marginRight: '10px'}}/>
-                        <span>{user.info.nick}</span>
+                        <Avatar shape="circle" size="large" style={{marginRight: '10px'}} src={user.userInfo.avatar}/>
+                        <span>{user.userInfo.nick}</span>
                     </div>
                     <Menu
                         selectedKeys={[]}
@@ -50,6 +57,9 @@ class Index extends React.Component {
                         </MenuItem>
                         <MenuItem key="login">
                             <Icon type="login" href="/login"/>登录/注册
+                        </MenuItem>
+                        <MenuItem key="mate">
+                            <Icon type="search" />另一半
                         </MenuItem>
                     </Menu>
                 </Header>
@@ -64,6 +74,19 @@ class Index extends React.Component {
                 <Footer style={{ textAlign: 'center' }}>
                     Sweeet Home created By Liuyang
                 </Footer>
+                <Modal
+                    visible={showSetModal}
+                    footer={null}
+                    title="另一半"
+                    destroyOnClose={true}
+                    onCancel={() => {
+                        this.setState({
+                            showSetModal: false
+                        });
+                    }}
+                >
+                    <MateSetForm mate={user.mate} onSubmit={this.handleSetMate}/>
+                </Modal>
             </Layout>
         );
     }
@@ -79,7 +102,16 @@ class Index extends React.Component {
         switch(target.key) {
         case 'login':
             return window.location = '/login';
+        case 'mate':
+            this.setState({
+                showSetModal: true
+            });
+            return;
         }
+    }
+    handleSetMate(value) {
+        const {dispatch} = this.props;
+        dispatch(setMate(value.userId));
     }
 }
 Index.propTypes = {

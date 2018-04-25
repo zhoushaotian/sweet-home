@@ -6,7 +6,10 @@ const urlMap = {
     loginInfo: '/api/login-info',
     fetchEvents: '/api/events',
     addEvent: '/api/event/add',
-    editEvent: '/api/event/edit'
+    editEvent: '/api/event/edit',
+    searchMate: '/api/mate/search',
+    nickExit: '/api/nick/exit',
+    setMate: '/api/mate/set'
 };
 
 export default function(url, data, method) {

@@ -3,22 +3,24 @@ import propTypes from 'prop-types';
 
 import moment from 'moment';
 import {Card, Icon, Button, Modal, List} from 'antd';
-import EventAddForm from '../components/form/event_add';
 import { dateFomat, dateFomatOnlyDay, dateFomatOnlyMonth, dateFomatOnlyYear } from '../common/const';
 
+import EventDetail from './event_detail';
 
 class CalendarEvents extends React.Component {
     constructor(props) {
         super(props);
         this.handleShowAddEvent = this.handleShowAddEvent.bind(this);
         this.handleAddEvent = this.handleAddEvent.bind(this);
+        this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
         this.state = {
             showAddEvent: false,
-            curEvent: {}
+            curEvent: {},
+            addEvent: false
         };
     }
     render() {
-        const {showAddEvent, curEvent} = this.state;
+        const {showAddEvent, curEvent, addEvent} = this.state;
         const {events, curTime} = this.props;
         const title = (
             <div>
@@ -50,17 +52,18 @@ class CalendarEvents extends React.Component {
                     <List
                         itemLayout="horizontal"
                         dataSource={result}
-                        renderItem={item => (
+                        renderItem={(item, index) => (
                             <List.Item
                                 extra={moment(parseInt(item.time)).format(dateFomat)}
+                                actions={[<Icon key={index} onClick={(e) => {this.handleDeleteEvent(item.eventId, e);}} type="delete"/>]}
                                 onClick={() => {this.setState({
                                     showAddEvent: true,
-                                    curEvent: item
+                                    curEvent: item,
+                                    addEvent: false
                                 });}}
                             >
                                 <List.Item.Meta
                                     title={<span>{item.level === 1 ? <Icon type="smile" style={{color: 'pink', marginRight: '10px'}}/> : <Icon type="frown" style={{color: 'black', marginRight: '10px'}}/>}{item.title}</span>}
-                                    description={item.detail}
                                 />
                             </List.Item>
                         )}
@@ -68,6 +71,7 @@ class CalendarEvents extends React.Component {
                     />
                 </Card>
                 <Modal
+                    title={addEvent ? '添加事件' : '事件详情'}
                     visible={showAddEvent}
                     onCancel={() => {this.setState({
                         showAddEvent: false
@@ -75,10 +79,11 @@ class CalendarEvents extends React.Component {
                     footer={null}
                     destroyOnClose={true}
                 >
-                    <EventAddForm
+                    <EventDetail
                         loading={false}
-                        onSubmit={this.handleAddEvent}
+                        onEventSubmit={this.handleAddEvent}
                         defaultValue={curEvent}
+                        addEvent={addEvent}
                     />
                 </Modal>
             </div>
@@ -86,8 +91,20 @@ class CalendarEvents extends React.Component {
     }
     handleShowAddEvent() {
         this.setState({
+            addEvent: true,
             showAddEvent: true,
             curEvent: {}
+        });
+    }
+    handleDeleteEvent(id, reactEvent) {
+        reactEvent.stopPropagation();
+        const {onDeleteEvent} = this.props;
+        Modal.confirm({
+            title: '确认要删除吗?',
+            content: '该操作将永久删除该事件',
+            onOk: () => {
+                onDeleteEvent(id);
+            }
         });
     }
     handleAddEvent(value, edit) {
@@ -118,6 +135,7 @@ CalendarEvents.propTypes = {
     curTime: propTypes.object.isRequired,
     events: propTypes.array,
     onAddEvent: propTypes.func.isRequired,
-    onEditEvent: propTypes.func.isRequired
+    onEditEvent: propTypes.func.isRequired,
+    onDeleteEvent: propTypes.func.isRequired
 };
 export default CalendarEvents;

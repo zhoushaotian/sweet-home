@@ -267,5 +267,23 @@ router.post('/event/edit', checkLoginMid, bodyParser.json(), function(req, res, 
     }).catch(next);
 });
 
+router.get('/event/delete', checkLoginMid, function(req, res, next) {
+    if(!parseInt(req.query.id)) {
+        let err = new Error('事件id错误');
+        err.status = STATUS_CODE.API_ERROR;
+        return next(err);
+    }
+    event.deleteEvent(parseInt(req.query.id), req.session.userId)
+        .then(function(result) {
+            if(result.affectedRows === 0) {
+                let err = new Error('事件不存在或不是该事件的创建人');
+                err.status = STATUS_CODE.API_ERROR;
+                return next(err);
+            }
+            res.send(tool.buildResData({
+                success: true
+            }, '删除成功'));
+        }).catch(next);
+});
 exports.router = router;
 

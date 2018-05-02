@@ -8,7 +8,7 @@ import CalendarEvents from '../components/calendar_events';
 import MateSetForm from '../components/form/mate_set';
 
 import {fetchUserInfo, setMate} from '../actions/user';
-import {addEvent, fetchEvents, editEvent} from '../actions/events';
+import {addEvent, fetchEvents, editEvent, deleteEvent} from '../actions/events';
 
 
 const { Header, Content, Footer } = Layout;
@@ -23,6 +23,7 @@ function propMap(state) {
 class Index extends React.Component {
     constructor() {
         super();
+        this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
         this.handleAddEvent = this.handleAddEvent.bind(this);
         this.handleEditEvent = this.handleEditEvent.bind(this);
         this.handleClickMenu = this.handleClickMenu.bind(this);
@@ -68,7 +69,7 @@ class Index extends React.Component {
                         <Calendar/>
                     </div>
                     <div className="calendar-events">
-                        <CalendarEvents onEditEvent={this.handleEditEvent} onAddEvent={this.handleAddEvent} events={events.events} curTime={events.curTime}/>
+                        <CalendarEvents onDeleteEvent={this.handleDeleteEvent} onEditEvent={this.handleEditEvent} onAddEvent={this.handleAddEvent} events={events.events} curTime={events.curTime}/>
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
@@ -89,6 +90,10 @@ class Index extends React.Component {
                 </Modal>
             </Layout>
         );
+    }
+    handleDeleteEvent(id) {
+        const {dispatch} = this.props;
+        dispatch(deleteEvent(id));
     }
     handleAddEvent(value, cb) {
         const {dispatch} = this.props;

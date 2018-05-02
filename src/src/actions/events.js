@@ -71,3 +71,21 @@ export function addEvent(data, cb) {
             });
     };
 }
+
+export function deleteEvent(id) {
+    return function(dispatch) {
+        dispatch(updateTableLoading(true));
+        fetchData('deleteEvent', {
+            id
+        }).then(function(res) {
+            dispatch(updateTableLoading(false));
+            if(!res.data.data.success) {
+                return message.error(res.data.msg);
+            }
+            dispatch(fetchEvents());
+        }).catch(function(err) {
+            dispatch(updateTableLoading(false));
+            return message.error(err.message);
+        });
+    };
+}

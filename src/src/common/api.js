@@ -6,6 +6,7 @@ const urlMap = {
     loginInfo: '/api/login-info',
     fetchEvents: '/api/events',
     addEvent: '/api/event/add',
+    deleteEvent: '/api/event/delete',
     editEvent: '/api/event/edit',
     searchMate: '/api/mate/search',
     nickExit: '/api/nick/exit',

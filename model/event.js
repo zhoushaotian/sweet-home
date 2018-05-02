@@ -87,6 +87,16 @@ module.exports.editEvent = function (userId, event) {
     });
 };
 
+module.exports.deleteEvent = function(id, userId) {
+    return new Promise(function(resolve, reject) {
+        pool.query('delete from event where createdBy = ? and eventId = ? or mate = ? and eventId = ?', [userId, id, userId, id], function(err, result) {
+            if(err) {
+                return reject(err);
+            }
+            resolve(result);
+        });
+    });
+};
 
 
 

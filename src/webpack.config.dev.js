@@ -57,6 +57,10 @@ module.exports = {
                 ])
             },
             {
+                test: /\.css$/,
+                loader: extractLESS.extract(['css-loader'])
+            },
+            {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'file-loader',
                 query: {

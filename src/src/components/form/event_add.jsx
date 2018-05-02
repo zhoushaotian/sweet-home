@@ -4,11 +4,13 @@ import propTypes from 'prop-types';
 import { Form, Input, Spin, Button, Radio } from 'antd';
 import {eventLevel} from '../../common/const';
 
-const {TextArea} = Input;
+import EditorItem from '../editor';
+
+
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 
-class LoginForm extends React.Component {
+class EventAdd extends React.Component {
     constructor() {
         super();
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -70,7 +72,7 @@ class LoginForm extends React.Component {
                                 ],
                                 initialValue: defaultValue.detail ? defaultValue.detail : ''
                             })(
-                                <TextArea autosize={{ minRows: 10, maxRows: 18 }}/>
+                                <EditorItem/>
                             )
                         }
                     </FormItem>
@@ -98,11 +100,11 @@ class LoginForm extends React.Component {
     }
 }
 
-LoginForm.propTypes = {
+EventAdd.propTypes = {
     loading: propTypes.bool,
     form: propTypes.object,
     onSubmit: propTypes.func,
     defaultValue: propTypes.object.isRequired,
 };
 
-export default Form.create()(LoginForm);
+export default Form.create()(EventAdd);

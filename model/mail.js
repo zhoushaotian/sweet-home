@@ -17,7 +17,7 @@ module.exports.queryMailById = function(userId) {
 
 module.exports.addMail = function(mailOpt, userId) {
     return new Promise(function(resolve, reject) {
-        pool.query('insert into mail (sendTime, title, content, receiver, createBy, isSend) values (?,?,?,?,?,0)', [mailOpt.sendTime, mailOpt.title, mailOpt.content, mailOpt.receiver, userId] , function(err) {
+        pool.query('insert into mail (sendTime, title, content, receiver, createBy, isSend) values (?,?,?,?,?,0)', [mailOpt.sendTime, mailOpt.title, mailOpt.content, mailOpt.receiver, userId], function(err) {
             if(err) {
                 return reject(err);
             }

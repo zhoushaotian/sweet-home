@@ -4,14 +4,17 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const extractLESS = new ExtractTextPlugin('app.[chunkhash:8].min.css');
+const extractLESS = new ExtractTextPlugin('css/app.[chunkhash:8].min.css');
+
+const del = require('del');
+del([path.join(__dirname, '../public/js'), path.join(__dirname, '../public/css')]);
 
 module.exports = {
     entry: {
         app: [path.resolve(__dirname, 'src/app.jsx')]
     },
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, '../public'),
         filename: 'js/[name].[hash:8].js',
         chunkFilename: 'js/[name].[hash:8].js',
         publicPath: '/'
@@ -54,6 +57,10 @@ module.exports = {
                 ])
             },
             {
+                test: /\.css$/,
+                loader: extractLESS.extract(['css-loader'])
+            },
+            {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'file-loader',
                 query: {
@@ -74,7 +81,7 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new FriendlyErrorsPlugin(),
         new HtmlWebpackPlugin({
-            filename: 'index.html',
+            filename: '../views/index.hbs',
             template: 'index.html',
             inject: true
         })

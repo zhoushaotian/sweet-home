@@ -7,7 +7,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractLESS = new ExtractTextPlugin('css/app.[chunkhash:8].min.css');
 
 const del = require('del');
-del([path.join(__dirname, '../public/js'), path.join(__dirname, '../public/css')]);
+del([path.resolve(__dirname, '../public/js'), path.resolve(__dirname, '../public/css'), path.resolve(__dirname, '../public/font')], {
+    force: true
+});
 
 module.exports = {
     entry: {
@@ -19,7 +21,6 @@ module.exports = {
         chunkFilename: 'js/[name].[hash:8].js',
         publicPath: '/'
     },
-    devtool: 'source-map',
     resolve: {
         extensions: ['.js', '.jsx', '.json']
     },

@@ -10,7 +10,9 @@ const urlMap = {
     editEvent: '/api/event/edit',
     searchMate: '/api/mate/search',
     nickExit: '/api/nick/exit',
-    setMate: '/api/mate/set'
+    setMate: '/api/mate/set',
+    addMail: '/api/mail/add',
+    getMail: '/api/mail'
 };
 
 export default function(url, data, method) {

@@ -21,6 +21,7 @@ const checkLoginMid = require('../middlewares/check').checkLogin;
 
 const user = require('../model/user');
 const event = require('../model/event');
+const mail = require('../model/mail');
 
 exports.rootPath = '/api';
 
@@ -283,6 +284,48 @@ router.get('/event/delete', checkLoginMid, function(req, res, next) {
             res.send(tool.buildResData({
                 success: true
             }, '删除成功'));
+        }).catch(next);
+});
+
+router.post('/mail/add', checkLoginMid, bodyParser.json(), function(req, res, next) {
+    if(!req.body.content) {
+        let err = new Error('邮件内容不能为空');
+        err.status = STATUS_CODE.API_ERROR;
+        return next(err);
+    }
+    if(!req.body.title) {
+        let err = new Error('邮件主题不能为空');
+        err.status = STATUS_CODE.API_ERROR;
+        return next(err);
+    }
+    if(!parseInt(req.body.sendTime)) {
+        let err = new Error('邮件发送时间不正确');
+        err.status = STATUS_CODE.API_ERROR;
+        return next(err);
+    }
+    if(!req.body.receiver) {
+        let err = new Error('邮件收件人不能为空');
+        err.status = STATUS_CODE.API_ERROR;
+        return next(err);
+    }
+    mail.addMail({
+        content: req.body.content,
+        title: req.body.title,
+        sendTime: parseInt(req.body.sendTime),
+        receiver: req.body.receiver
+    }, req.session.userId).then(function() {
+        res.send(tool.buildResData({
+            success: true
+        }, '新增成功'));
+    }).catch(next);
+});
+
+router.get('/mail', checkLoginMid, function(req, res, next) {
+    mail.queryMailById(req.session.userId)
+        .then(function(result) {
+            res.send(tool.buildResData({
+                mailList: result
+            }, '查询成功'));
         }).catch(next);
 });
 exports.router = router;

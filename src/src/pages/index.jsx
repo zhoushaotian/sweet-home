@@ -6,9 +6,12 @@ import { Layout, Menu, Avatar, Icon, Modal } from 'antd';
 import Calendar from '../components/calendar';
 import CalendarEvents from '../components/calendar_events';
 import MateSetForm from '../components/form/mate_set';
+import MailAdddForm from '../components/form/mail_add';
+import MailList from '../components/mail_list';
 
 import {fetchUserInfo, setMate} from '../actions/user';
 import {addEvent, fetchEvents, editEvent, deleteEvent} from '../actions/events';
+import {addMail, fetchMailList} from '../actions/mail';
 
 
 const { Header, Content, Footer } = Layout;
@@ -17,19 +20,23 @@ const MenuItem = Menu.Item;
 function propMap(state) {
     return {
         user: state.user,
-        events: state.events
+        events: state.events,
+        mail: state.mail
     };
 }
 class Index extends React.Component {
     constructor() {
         super();
+        this.handleAddMail = this.handleAddMail.bind(this);
         this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
         this.handleAddEvent = this.handleAddEvent.bind(this);
         this.handleEditEvent = this.handleEditEvent.bind(this);
         this.handleClickMenu = this.handleClickMenu.bind(this);
         this.handleSetMate = this.handleSetMate.bind(this);
         this.state = {
-            showSetModal: false
+            showSetModal: false,
+            showAddMailModal: false,
+            showMailListModal: false
         };
     }
     componentDidMount() {
@@ -38,8 +45,8 @@ class Index extends React.Component {
         dispatch(fetchEvents());
     }
     render() {
-        const {events, user} = this.props;
-        const {showSetModal} = this.state;
+        const {events, user, mail} = this.props;
+        const {showSetModal, showAddMailModal, showMailListModal} = this.state;
         return (
             <Layout className="layout">
                 <Header className="layout-header">
@@ -53,7 +60,10 @@ class Index extends React.Component {
                         className="layout-menu"
                         onClick={this.handleClickMenu}
                     >
-                        <MenuItem>
+                        <MenuItem key="mail">
+                            <Icon type="mail"/>寄信
+                        </MenuItem>
+                        <MenuItem key="mailList">
                             <Icon type="database"/>信箱
                         </MenuItem>
                         <MenuItem key="login">
@@ -88,8 +98,41 @@ class Index extends React.Component {
                 >
                     <MateSetForm mate={user.mate} onSubmit={this.handleSetMate}/>
                 </Modal>
+                <Modal
+                    visible={showAddMailModal}
+                    footer={null}
+                    title="寄信"
+                    onCancel={() => {
+                        this.setState({
+                            showAddMailModal: false
+                        });
+                    }}
+                    destroyOnClose={true}
+                >
+                    <MailAdddForm onSubmit={this.handleAddMail} loading={false}/>
+                </Modal>
+                <Modal
+                    visible={showMailListModal}
+                    footer={null}
+                    title="我寄出的信"
+                    onCancel={() => {
+                        this.setState({
+                            showMailListModal: false
+                        });
+                    }}
+                >
+                    <MailList mailList={mail.mailList}/>
+                </Modal>
             </Layout>
         );
+    }
+    handleAddMail(value) {
+        const {dispatch} = this.props;
+        dispatch(addMail(value, () => {
+            this.setState({
+                showAddMailModal: false
+            });
+        }));
     }
     handleDeleteEvent(id) {
         const {dispatch} = this.props;
@@ -104,6 +147,7 @@ class Index extends React.Component {
         dispatch(editEvent(value, cb));
     }
     handleClickMenu(target) {
+        const {dispatch} = this.props;
         switch(target.key) {
         case 'login':
             return window.location = '/login';
@@ -111,7 +155,19 @@ class Index extends React.Component {
             this.setState({
                 showSetModal: true
             });
-            return;
+            break;
+        case 'mail':
+            this.setState({
+                showAddMailModal: true
+            });
+            break;
+        case 'mailList':
+            dispatch(fetchMailList(() => {
+                this.setState({
+                    showMailListModal: true
+                });
+            }));
+            break;
         }
     }
     handleSetMate(value) {
@@ -124,7 +180,8 @@ Index.propTypes = {
     events: propTypes.object,
     list: propTypes.array,
     dispatch: propTypes.func,
-    getState: propTypes.func
+    getState: propTypes.func,
+    mail: propTypes.object
 };
 
 export default connect(propMap)(Index);

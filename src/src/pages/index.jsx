@@ -13,6 +13,7 @@ import {fetchUserInfo, setMate} from '../actions/user';
 import {addEvent, fetchEvents, editEvent, deleteEvent} from '../actions/events';
 import {addMail, fetchMailList} from '../actions/mail';
 
+import fetchData from '../common/api';
 
 const { Header, Content, Footer } = Layout;
 const MenuItem = Menu.Item;
@@ -71,6 +72,9 @@ class Index extends React.Component {
                         </MenuItem>
                         <MenuItem key="mate">
                             <Icon type="search" />另一半
+                        </MenuItem>
+                        <MenuItem key="exit">
+                            <Icon type="logout" />退出登录
                         </MenuItem>
                     </Menu>
                 </Header>
@@ -167,6 +171,9 @@ class Index extends React.Component {
                     showMailListModal: true
                 });
             }));
+            break;
+        case 'exit':
+            fetchData('exit');
             break;
         }
     }

@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const urlMap = {
     signUp: '/api/signup',
+    exit: '/api/exit',
     login: '/api/login',
     loginInfo: '/api/login-info',
     fetchEvents: '/api/events',

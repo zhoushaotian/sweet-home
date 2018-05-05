@@ -92,6 +92,15 @@ router.post('/signup', bodyParser.json(), function (req, res, next) {
         }));
     }).catch(next);
 });
+//退出登录
+router.get('/exit', function(req, res, next) {
+    req.session.regenerate(function(err) {
+        if(err) {
+            return next(err);
+        }
+        return res.redirect('/login');
+    });
+});
 // 用户登录
 router.post('/login', bodyParser.json(), function(req, res, next) {
     function login() {

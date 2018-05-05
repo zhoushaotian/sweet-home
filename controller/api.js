@@ -94,11 +94,13 @@ router.post('/signup', bodyParser.json(), function (req, res, next) {
 });
 //退出登录
 router.get('/exit', function(req, res, next) {
-    req.session.regenerate(function(err) {
+    req.session.destroy(function(err) {
         if(err) {
             return next(err);
         }
-        return res.redirect('/login');
+        return res.send(tool.buildResData({
+            success: true
+        }, '注销成功'));
     });
 });
 // 用户登录

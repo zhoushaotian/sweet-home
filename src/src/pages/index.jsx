@@ -2,7 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { Layout, Menu, Avatar, Icon, Modal } from 'antd';
+import { Layout, Menu, Avatar, Icon, Modal, message } from 'antd';
 import Calendar from '../components/calendar';
 import CalendarEvents from '../components/calendar_events';
 import MateSetForm from '../components/form/mate_set';
@@ -173,7 +173,20 @@ class Index extends React.Component {
             }));
             break;
         case 'exit':
-            fetchData('exit');
+            Modal.confirm({
+                title: '',
+                content: '你确定要退出吗',
+                onOk: () => {
+                    fetchData('exit').then(function(res) {
+                        if(res.data.data.success) {
+                            return window.location.href = '/login';
+                        }
+                        return message.error('退出失败');
+                    }).catch(function(err) {
+                        message.error(err.message);
+                    });
+                }
+            });
             break;
         }
     }

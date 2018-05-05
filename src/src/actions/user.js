@@ -25,6 +25,7 @@ export function userLogin(data) {
                     return dispatch(updateFormLoading(false));
                 }
                 message.success('登录成功');
+                window.location.href = '/';                
             }).catch(function(err) {
                 message.error(err.message);
             });

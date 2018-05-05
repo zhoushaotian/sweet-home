@@ -1,6 +1,7 @@
 import fetchData from '../common/api';
 import {message} from 'antd';
 import {updateTableLoading, updateFormLoading} from './modal';
+import {browserHistory} from 'react-router';
 export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
 export const CLEAN_USER_INFO = 'CLEAN_USER_INFO';
 
@@ -25,7 +26,7 @@ export function userLogin(data) {
                     return dispatch(updateFormLoading(false));
                 }
                 message.success('登录成功');
-                window.location.href = '/';                
+                browserHistory.push('/');                             
             }).catch(function(err) {
                 message.error(err.message);
             });
@@ -41,7 +42,7 @@ export function userSignUp(data) {
                     return dispatch(updateFormLoading(false));
                 }
                 message.success('注册成功');
-                window.location.herf = '/';
+                browserHistory.push('/');
             }).catch(function(err) {
                 message.error(err.message);
             });

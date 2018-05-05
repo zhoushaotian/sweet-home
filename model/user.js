@@ -84,11 +84,11 @@ module.exports.createUser = function(userOpts) {
             return Promise.reject(err);
         }
         return new Promise(function(resolve, reject) {
-            pool.query('insert into user (userName, passwd, nick, sex, bio, createdTime) values (?,?,?,?,?,?)', [userOpts.userName, userOpts.passwd, userOpts.nick, userOpts.sex, userOpts.bio, userOpts.time], function(err) {
+            pool.query('insert into user (userName, passwd, nick, sex, bio, createdTime) values (?,?,?,?,?,?)', [userOpts.userName, userOpts.passwd, userOpts.nick, userOpts.sex, userOpts.bio, userOpts.time], function(err, result) {
                 if(err) {
                     return reject(err);
                 }
-                return resolve();
+                return resolve(result);
             });
         });
     });

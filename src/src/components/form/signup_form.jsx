@@ -136,7 +136,6 @@ class signUpForm extends React.Component {
         const { handleSignUp, form } = this.props;
         const { validateFields } = form;
         validateFields((err, values) => {
-            console.log(values);
             if (err) {
                 return;
             }

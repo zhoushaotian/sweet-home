@@ -41,6 +41,7 @@ export function userSignUp(data) {
                     return dispatch(updateFormLoading(false));
                 }
                 message.success('注册成功');
+                window.location.herf = '/';
             }).catch(function(err) {
                 message.error(err.message);
             });

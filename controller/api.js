@@ -86,7 +86,10 @@ router.post('/signup', bodyParser.json(), function (req, res, next) {
         sex: req.body.sex,
         time: new Date().getTime()
     };
-    user.createUser(userOpt).then(function() {
+    user.createUser(userOpt).then(function(result) {
+        req.session.userId = result.insertId;
+        req.session.nick = userOpt.nick;   
+        console.log('新用户注册-userId:', req.session.userId);
         res.send(tool.buildResData({
             success: true
         }));

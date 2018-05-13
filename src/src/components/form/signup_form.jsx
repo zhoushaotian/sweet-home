@@ -29,6 +29,21 @@ class signUpForm extends React.Component {
                                         min: 3,
                                         max: 15,
                                         message: '用户名格式错误'
+                                    },
+                                    {
+                                        validator: (rule, value, cb) => {
+                                            if(!value) {
+                                                cb();
+                                            }
+                                            fetchData('userNameExit', {
+                                                userName: value
+                                            }).then((res) => {
+                                                if(!res.data.data.success) {
+                                                    cb('这个用户名已经有人使用了!');
+                                                }
+                                                cb();
+                                            });
+                                        }
                                     }
                                 ]
                             })(
@@ -67,6 +82,18 @@ class signUpForm extends React.Component {
                             })(
                                 <Input type="password" />
                             )
+                        }
+                    </FormItem>
+                    <FormItem label="绑定验证码">
+                        {
+                            getFieldDecorator('code', {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请填写绑定验证码，将用于绑定情侣'
+                                    }
+                                ]
+                            })(<Input/>)
                         }
                     </FormItem>
                     <FormItem label="性别">

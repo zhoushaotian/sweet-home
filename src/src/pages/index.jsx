@@ -192,7 +192,7 @@ class Index extends React.Component {
     }
     handleSetMate(value) {
         const {dispatch} = this.props;
-        dispatch(setMate(value.userId));
+        dispatch(setMate(value.userId, value.code));
     }
 }
 Index.propTypes = {

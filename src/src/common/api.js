@@ -13,7 +13,9 @@ const urlMap = {
     nickExit: '/api/nick/exit',
     setMate: '/api/mate/set',
     addMail: '/api/mail/add',
-    getMail: '/api/mail'
+    getMail: '/api/mail',
+    vertifyCode: '/api/vertifyCode',
+    userNameExit: '/api/username/exit'
 };
 
 export default function(url, data, method) {

@@ -1,8 +1,9 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-import { Form, Spin, Button, Tag } from 'antd';
+import { Form, Spin, Button, Tag, Input } from 'antd';
 import SearchInput from '../search_input';
+import fetchData from '../../common/api';
 
 const FormItem = Form.Item;
 
@@ -13,7 +14,7 @@ class MateSet extends React.Component {
     }
     render() {
         const {form, mate} = this.props;
-        const {getFieldDecorator} = form;
+        const {getFieldDecorator, getFieldValue} = form;
         return (
             <Spin
                 spinning={false}
@@ -36,6 +37,36 @@ class MateSet extends React.Component {
                             })(
                                 <SearchInput/>
                             )}
+                        </FormItem>
+                        <FormItem
+                            label="对方的绑定验证码"
+                        >
+                            {
+                                getFieldDecorator('code', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请填写对方的绑定验证码'
+                                        },
+                                        {
+                                            validator: (rule, value, cb) => {
+                                                let id = getFieldValue('userId');
+                                                if(value === '' || id === '') {
+                                                    return cb();
+                                                }
+                                                fetchData('vertifyCode', {
+                                                    mateId: id,
+                                                    code: value
+                                                }).then(function(res) {
+                                                    res.data.data.success ? cb() : cb('另一方的绑定验证码错误');
+                                                });
+                                            }
+                                        }
+                                    ]
+                                })(
+                                    <Input/>
+                                )
+                            }
                         </FormItem>
                         <FormItem>
                             <Button type="primary" onClick={this.handleSubmit}>保存</Button>

@@ -62,11 +62,12 @@ export function fetchUserInfo() {
     };
 }
 
-export function setMate(id) {
+export function setMate(id, code) {
     return function(dispatch) {
         dispatch(updateFormLoading(true));
         fetchData('setMate', {
-            mateId: id
+            mateId: id,
+            code
         }).then(function(res) {
             dispatch(updateFormLoading(false));
             if(!res.data.data.success) {

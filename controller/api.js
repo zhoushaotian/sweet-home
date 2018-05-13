@@ -25,6 +25,20 @@ const mail = require('../model/mail');
 
 exports.rootPath = '/api';
 
+
+router.get('/username/exit', function(req, res, next) {
+    user.queryUserByUserName(req.query.userName)
+        .then(function(result) {
+            if(result.length !== 0) {
+                return res.send(tool.buildResData({
+                    success: false
+                }, '用户名存在'));
+            }
+            return res.send(tool.buildResData({
+                success: true
+            }));
+        }).catch(next);
+});
 /**
  * 查询昵称是否存在
  */
@@ -84,7 +98,8 @@ router.post('/signup', bodyParser.json(), function (req, res, next) {
         passwd: sha1(req.body.passwd),
         nick: req.body.nick,
         sex: req.body.sex,
-        time: new Date().getTime()
+        time: new Date().getTime(),
+        code: req.body.code
     };
     user.createUser(userOpt).then(function(result) {
         req.session.userId = result.insertId;
@@ -195,7 +210,7 @@ router.get('/mate/set', checkLoginMid, function(req, res, next) {
         err.status = STATUS_CODE.API_ERROR;
         return next(err);
     }
-    user.setMate(req.session.userId, parseInt(req.query.mateId)).then(function() {
+    user.setMate(req.session.userId, parseInt(req.query.mateId), req.query.code).then(function() {
         res.send(tool.buildResData({
             success: true
         }, '设置mate成功'));
@@ -339,6 +354,15 @@ router.get('/mail', checkLoginMid, function(req, res, next) {
         .then(function(result) {
             res.send(tool.buildResData({
                 mailList: result
+            }, '查询成功'));
+        }).catch(next);
+});
+
+router.get('/vertifyCode', checkLoginMid, function(req, res, next) {
+    user.queryCode(req.query.mateId)
+        .then(function(result) {
+            return res.send(tool.buildResData({
+                success: result[0].vertifyCode === req.query.code
             }, '查询成功'));
         }).catch(next);
 });

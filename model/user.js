@@ -7,6 +7,17 @@ const mysql = require('mysql');
 const mysqlOptions = require('../config/server').mysqlOpt;
 const pool = mysql.createPool(mysqlOptions);
 
+module.exports.queryUserByUserName = function(name) {
+    return new Promise(function(resolve, reject) {
+        pool.query('select * from user where userName=?', [name], function(err, result) {
+            if(err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    });
+};
+
 module.exports.queryUserByNick = function(nick) {
     return new Promise(function(resolve, reject) {
         pool.query('select * from user where nick=?', [nick], function(err, result) {
@@ -84,7 +95,7 @@ module.exports.createUser = function(userOpts) {
             return Promise.reject(err);
         }
         return new Promise(function(resolve, reject) {
-            pool.query('insert into user (userName, passwd, nick, sex, bio, createdTime) values (?,?,?,?,?,?)', [userOpts.userName, userOpts.passwd, userOpts.nick, userOpts.sex, userOpts.bio, userOpts.time], function(err, result) {
+            pool.query('insert into user (userName, passwd, nick, sex, bio, createdTime, vertifyCode) values (?,?,?,?,?,?,?)', [userOpts.userName, userOpts.passwd, userOpts.nick, userOpts.sex, userOpts.bio, userOpts.time, userOpts.code], function(err, result) {
                 if(err) {
                     return reject(err);
                 }
@@ -96,7 +107,7 @@ module.exports.createUser = function(userOpts) {
 
 module.exports.searchMate = function(userId) {
     return new Promise(function(resolve, reject) {
-        pool.query('select nick, userId from user where userId != ?', [userId], function(err, result) {
+        pool.query('select nick, userId from user where userId != ? and mate = 0', [userId], function(err, result) {
             if(err) {
                 return reject(err);
             }
@@ -105,13 +116,47 @@ module.exports.searchMate = function(userId) {
     });
 };
 
-module.exports.setMate = function(userId, mateId) {
+module.exports.setMate = function(userId, mateId, code) {
     return new Promise(function(resolve, reject) {
-        pool.query('update user set mate = ? where userId = ?', [mateId, userId], function(err) {
+        pool.query('select vertifyCode from user where userId = ?', [mateId], function(err, result) {
             if(err) {
                 return reject(err);
             }
+            if(code !== result[0].vertifyCode) {
+                let err = new Error('验证码错误');
+                err.status = STATUS_CODES.API_ERROR;
+                return reject(err);
+            }
             return resolve();
+        });
+    }).then(function() {
+        return new Promise(function(resolve, reject) {
+            pool.query('update user set mate = ? where userId = ?', [mateId, userId], function(err) {
+                if(err) {
+                    return reject(err);
+                }
+                return resolve();
+            });
+        });
+    }).then(function() {
+        return new Promise(function (resolve, reject) {
+            pool.query('update user set mate = ? where userId = ?', [userId, mateId], function(err) {
+                if(err) {
+                    return reject(err);
+                }
+                return resolve();
+            });
+        });
+    });
+};
+
+module.exports.queryCode = function(userId) {
+    return new Promise(function(resolve, reject) {
+        pool.query('select vertifyCode from user where userId = ?', [userId], function(err, result) {
+            if(err) {
+                return reject(err);
+            }
+            return resolve(result);
         });
     });
 };

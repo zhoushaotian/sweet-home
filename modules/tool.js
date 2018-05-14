@@ -6,7 +6,7 @@ exports.buildResData = function(data, msg) {
     res.status = STATUS_CODE.SUCCESS;
     res.msg = msg;
     res.data = data;
-    console.log('发送数据:', JSON.stringify(res));
+    console.log(new Date().toString(), '发送数据:', JSON.stringify(res));
     return res;
 };
 

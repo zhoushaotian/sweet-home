@@ -21,8 +21,12 @@ module.exports = {
         chunkFilename: 'js/[name].[hash:8].js',
         publicPath: '/'
     },
+    devtool: false,
     externals: {
-        react: 'React'
+        react: 'React',
+        moment: 'moment',
+        'react-dom': 'ReactDOM',
+        'react-redux': 'ReactRedux'
     },
     resolve: {
         extensions: ['.js', '.jsx', '.json']

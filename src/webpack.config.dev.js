@@ -20,7 +20,11 @@ module.exports = {
         publicPath: '/'
     },
     externals: {
-        react: 'React'
+        react: 'React',
+        moment: 'moment',
+        'react-dom': 'ReactDOM',
+        'react-redux': 'ReactRedux'
+        
     },
     devtool: '#cheap-module-eval-source-map',
     resolve: {

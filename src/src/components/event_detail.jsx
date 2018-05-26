@@ -16,6 +16,7 @@ class EventDetail extends React.Component {
         let videoDoms = document.getElementsByTagName('video');
         for(let videoDom of videoDoms) {
             videoDom.setAttribute('controls', '');
+            videoDom.setAttribute('autoplay', '');
         }
     }
     render() {

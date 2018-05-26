@@ -11,6 +11,13 @@ class EventDetail extends React.Component {
         };
         this.handleClickEdit = this.handleClickEdit.bind(this);
     }
+    componentDidMount() {
+        // 向视频标签加入控件
+        let videoDoms = document.getElementsByTagName('video');
+        for(let videoDom of videoDoms) {
+            videoDom.setAttribute('controls', '');
+        }
+    }
     render() {
         const {defaultValue, addEvent, loading, onEventSubmit} = this.props;
         const {editable} = this.state;

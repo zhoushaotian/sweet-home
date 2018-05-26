@@ -8,13 +8,26 @@ const multer = require('multer');
 const tool = require('../modules/tool');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.resolve('public', 'img'));
+        switch(true) {
+        case /^video\//.test(file.mimetype):
+            cb(null, path.resolve('public', 'video'));
+            break;
+        case /^image\//.test(file.mimetype):
+            cb(null, path.resolve('public', 'img'));
+        }
     },
     filename: function (req, file, cb) {
-        cb(null, uuidv1() + '.' + 'jpg');
+        switch(true) {
+        case /^video\//.test(file.mimetype):
+            cb(null, uuidv1() + '.' + file.originalname.split('.')[1]);
+            break;
+        case /^image\//.test(file.mimetype):
+            cb(null, uuidv1() + '.' + 'jpg');
+        }
     }
 });
-const upload = multer({ storage }).single('img');
+const upload = multer({ storage }).single('file');
+
 const path = require('path');
 const STATUS_CODE = require('../enums/status');
 const checkLoginMid = require('../middlewares/check').checkLogin;
@@ -56,7 +69,7 @@ router.get('/nick/exit', function(req, res, next) {
         }).catch(next);
 });
 /**
- * 上传用户头像
+ * 上传
  */
 router.post('/upload/avatar', function (req, res, next) {
     upload(req, res, function (err) {
@@ -64,7 +77,7 @@ router.post('/upload/avatar', function (req, res, next) {
             return next(err);
         }
         res.send(tool.buildResData({
-            path: `/img/${req.file.filename}`,
+            path: req.file.path.match(/\/public(\/[a-z]+\/.+)/)[1],
             success: true
         }));
     });

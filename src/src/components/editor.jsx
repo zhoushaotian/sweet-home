@@ -16,15 +16,15 @@ class EditorItem extends React.Component {
         const { value } = this.props;
         const { imgList } = this.state;        
         return (
-            <LzEditor importContent={value} cbReceiver={this.handleChange} audio={false} video={false}
+            <LzEditor importContent={value} cbReceiver={this.handleChange} audio={false} video={true}
                 uploadProps={{
                     action: '/api/upload/avatar',
-                    accept: 'image/*',
+                    accept: '*/*',
                     showUploadList: true,
-                    name: 'img',
+                    name: 'file',
                     onChange: this.handleImgChange,
                     fileList: imgList,
-                    listType: 'picture'
+                    listType: 'text'
                 }}
             />
         );

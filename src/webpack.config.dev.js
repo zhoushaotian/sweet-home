@@ -19,6 +19,9 @@ module.exports = {
         chunkFilename: 'js/[name].[hash:8].js',
         publicPath: '/'
     },
+    externals: {
+        react: 'React'
+    },
     devtool: '#cheap-module-eval-source-map',
     resolve: {
         extensions: ['.js', '.jsx', '.json']

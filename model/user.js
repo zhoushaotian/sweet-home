@@ -95,7 +95,7 @@ module.exports.createUser = function(userOpts) {
             return Promise.reject(err);
         }
         return new Promise(function(resolve, reject) {
-            pool.query('insert into user (userName, passwd, nick, sex, bio, createdTime, vertifyCode) values (?,?,?,?,?,?,?)', [userOpts.userName, userOpts.passwd, userOpts.nick, userOpts.sex, userOpts.bio, userOpts.time, userOpts.code], function(err, result) {
+            pool.query('insert into user (userName, passwd, nick, sex, bio, createdTime, vertifyCode, avatar) values (?,?,?,?,?,?,?,?)', [userOpts.userName, userOpts.passwd, userOpts.nick, userOpts.sex, userOpts.bio, userOpts.time, userOpts.code, userOpts.avatar], function(err, result) {
                 if(err) {
                     return reject(err);
                 }

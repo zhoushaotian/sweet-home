@@ -28,7 +28,7 @@ class AvatarUpload extends React.Component {
                 action={action}
                 accept='image/*'
                 showUploadList={false}
-                name="img"
+                name="file"
                 onChange={this.handleFileChange}
             >
                 {img ? <Avatar src={img} size='large'/> : null}

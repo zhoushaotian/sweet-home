@@ -112,7 +112,8 @@ router.post('/signup', bodyParser.json(), function (req, res, next) {
         nick: req.body.nick,
         sex: req.body.sex,
         time: new Date().getTime(),
-        code: req.body.code
+        code: req.body.code,
+        avatar: req.body.avatar ? req.body.avatar : '/img/default.png'
     };
     user.createUser(userOpt).then(function(result) {
         req.session.userId = result.insertId;

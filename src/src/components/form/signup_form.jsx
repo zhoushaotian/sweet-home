@@ -145,7 +145,7 @@ class signUpForm extends React.Component {
                     </FormItem>
                     <FormItem label="头像">
                         {
-                            getFieldDecorator('avatar')(
+                            getFieldDecorator('file')(
                                 <AvatarUpload
                                     action='/api/upload/avatar'
                                 />
